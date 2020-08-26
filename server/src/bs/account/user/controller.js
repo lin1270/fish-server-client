@@ -5,7 +5,7 @@ module.exports = {
     '/api/user/query': (req, res, next)=>{
         userService.query(req.body, (error, result)=> {
             if (error) return next()
-            return res.json(result)
+            return res.json({success: true, data: {rows: result}})
         })
     }, 
     
@@ -25,6 +25,33 @@ module.exports = {
                 return res.json({success: false, errMsg: error})
             }
             return res.json({success: true, errMsg: '注册成功'})
+        })
+    },
+
+    '/api/user/save': (req, res, next)=>{
+        if (req.body.id) {
+            userService.update(req.body, (error, result)=>{
+                if (error) {
+                    return res.json({success: false, errMsg: error})
+                }
+                return res.json({success: true, errMsg: '保存成功'})
+            })
+        } else {
+            userService.register(req.body, (error, result)=> {
+                if (error) {
+                    return res.json({success: false, errMsg: error})
+                }
+                return res.json({success: true, errMsg: '保存成功'})
+            })
+        }
+    },
+
+    '/api/user/delete': (req, res, next)=>{
+        userService.delete(req.body, (error, result)=> {
+            if (error) {
+                return res.json({success: false, errMsg: error})
+            }
+            return res.json({success: true, errMsg: '删除成功'})
         })
     },
 }

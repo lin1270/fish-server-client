@@ -1,0 +1,112 @@
+.margin {
+  margin-left: 10px;
+}
+.margin-top-10 {
+  margin-top: 10px;
+}
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+.margin-right-10 {
+  margin-right: 10px;
+}
+
+.page {
+  padding: 5px 0;
+  text-align: center;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  background: white;
+  width: calc(100% - 200px);
+}
+
+.text-info {
+  color: #2db7f5;
+}
+.text-success {
+  color: #19be6b;
+}
+.text-warning {
+  color: #ff9900;
+}
+.text-error {
+  color: #ed4014;
+}
+.search-panel {
+  background-color: #ffffff;
+  padding: 10px 15px;
+  margin: 10px 0;
+  border-radius: 5px;
+  form {
+    display: flex;
+    flex-wrap: wrap;
+    .ivu-form-item {
+      margin: 10px 15px;
+      display: flex;
+    }
+  }
+}
+
+//.ivu-row {
+//  position: static !important;
+//}
+/* 面包屑 */
+.bread-crumbs {
+  position: sticky !important;
+  background: #fff;
+  right: 0px;
+  top: 0px;
+  padding: 6px 24px;
+  width: calc(100% + 48px);
+  z-index: 99;
+  margin-left: -24px !important;
+  margin-bottom: 15px;
+  &-left {
+    font-size: 15px;
+    font-weight: bold;
+  }
+  &-right {
+    display: flex !important;
+    justify-content: flex-end !important;
+    align-items: center !important;
+  }
+}
+
+/*  */
+.logo-input {
+  margin-bottom: 20px;
+  input {
+    width: 380px;
+    height: 52px;
+    color: #999999;
+    font-size: 18px;
+    text-align: center;
+  }
+}
+
+/* 修改iview默认样式 */
+.ivu-table-wrapper {
+  overflow: unset !important;
+}
+.ivu-table-fixed-body {
+  position: static !important;
+}
+
+.collapsed-menu .ivu-menu-submenu .ivu-menu-submenu-title .ivu-menu-submenu-title-icon {
+  display: none !important;
+}
+
+/*上传图片样式*/
+.disNone{
+  display: none;
+}
+
+.width100p {
+  width: 100% !important;
+}
+
+.search-item-seperator {
+  margin-right: 10px;
+  padding: 5px 0;
+}

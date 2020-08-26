@@ -1,0 +1,14 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea/
+*.iml
+node_modules/
+dist/
+dist.zip
+.idea
+.vscode
+.history/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+.DS_Store

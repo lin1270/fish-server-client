@@ -32,5 +32,13 @@ module.exports = {
                 }
             })
         })
-    }
+    },
+
+    update(param, cb) {
+        dbFish.exeSql(`UPDATE user SET pwd='${param.pwd}', name='${param.name}' WHERE id='${param.id}'`, cb);
+    },
+
+    delete(param, cb) {
+        dbFish.exeSql(`DELETE FROM user WHERE id='${param.id}'`, cb);
+    },
 }
