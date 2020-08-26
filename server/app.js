@@ -11,6 +11,15 @@ app.use(bodyParser.json())
 // application/x-www-form-urlencoded, UTF-8, gzip/deflate
 app.use(bodyParser.urlencoded({ extended: false }))
 
+
+app.use(function (req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Expose-Headers", 'x-user-token');
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept,x-user-token");
+    res.header("Access-Control-Allow-Methods", "PUT,POST,GET,DELETE,OPTIONS");
+    next();
+});
+
 // authorization middleware
 app.use(auth)
 bs(app)

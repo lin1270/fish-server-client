@@ -3,14 +3,14 @@ const token = require('../../../utils/token')
 
 module.exports = {
     '/api/user/query': (req, res, next)=>{
-        userService.query(req.query, (error, result)=> {
+        userService.query(req.body, (error, result)=> {
             if (error) return next()
             return res.json(result)
         })
     }, 
     
     '/api/user/login': (req, res, next)=>{
-        userService.login(req.query, (error, result)=> {
+        userService.login(req.body, (error, result)=> {
             if (error || !result || !result.length) {
                 return res.json({success: false, errMsg: '账号或密码不正确!'})
             }
@@ -20,7 +20,7 @@ module.exports = {
     },
 
     '/api/user/register': (req, res, next)=>{
-        userService.register(req.query, (error, result)=> {
+        userService.register(req.body, (error, result)=> {
             if (error) {
                 return res.json({success: false, errMsg: error})
             }

@@ -36,8 +36,9 @@ module.exports = {
 
     setHeaderToken(req, res, payload, needRefresh=true) {
         let token = this.getHeaderToken(req)
-        if (!token) token = this.generateToken(payload || {})
+        if (!token || token == 'null') token = this.generateToken(payload || {})
         else if (needRefresh) token = this.refreshToken(token)
+        if (!token) token = this.generateToken(payload || {})
         return res.header('x-user-token', token)
     },
 }
