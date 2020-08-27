@@ -4,16 +4,18 @@ const dbUtils = require('../utils/dbUtils')
 
 class DBBase {
     constructor(cfg) {
-        this.connection = mysql.createConnection(cfg)
-        this.connection.connect();
-
-        console.log('...db connect:', cfg)
+        this.pool = mysql.createPool(cfg)
+        console.log('...db createPool:', cfg)
     }
 
     execute(sql, cb) {
-        if (this.connection) {
-            this.connection.query(sql, (error, results)=>{
-                cb(error, dbUtils.getQueryResultByDbResult(results))
+        if (this.pool) {
+            this.pool.getConnection((err, conn)=>{
+                if (!err && conn) {
+                    conn.query(sql, (error, results)=>{
+                        cb(error, dbUtils.getQueryResultByDbResult(results))
+                    })
+                }
             })
         } else {
             cb('connection is null', null)
@@ -21,8 +23,7 @@ class DBBase {
     }
 
     disconnect() {
-        if (this.connection) this.connection.end()
-        this.connection = null
+        this.pool = null
     }
 }
 
