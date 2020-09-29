@@ -2,6 +2,7 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const bs = require('./src/middleware/bs')
 const auth = require('./src/middleware/auth')
+const errInfo = require('./src/common/errcode')
 
 var app = express()
 
@@ -30,8 +31,8 @@ bs(app)
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
         return res.json({
-            message: 'Invalid Token',
-            success: false,
+            msg: 'Invalid Token',
+            retcode: errInfo.FAIL.code,
         })
     } else {
       next(err, req, res, next)

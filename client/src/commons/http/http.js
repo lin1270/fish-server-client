@@ -35,8 +35,7 @@ http.interceptors.request.use(function (config) {
 http.interceptors.response.use(res => {
     //取消表格loading状态
     store.state.loading = false
-    //回调成功（success = false）
-    if (!res.data.success) {
+    if (res.data.retcode !== 0) {
         if (res.request.responseType !== 'blob') {
             Message.error({
                 content: res.data.msg,
@@ -49,7 +48,7 @@ http.interceptors.response.use(res => {
         }
     }
     //对响应数据成功回调时的处理
-    if (res.data.success && res.headers['x-user-token']) {
+    if (res.data.retcode === 0 && res.headers['x-user-token']) {
         store.state.token = res.headers['x-user-token']
     }
     return res

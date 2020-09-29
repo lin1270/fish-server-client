@@ -18,7 +18,7 @@ export const sendRequest = (url, params, method) => {
             method: method || 'POST'
         }).then(res => {
             if (res.status === 200) {
-                if (res.data.success) {
+                if (res.data.retcode === 0) {
                     resolve(res.data)
                 } else {
                     reject(JSON.stringify(res.data))

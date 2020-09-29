@@ -1,61 +1,59 @@
 const userService = require('./service')
 const token = require('../../../utils/token')
+const errorInfo = require('../../../common/errcode')
+const dbUtils = require('../../../utils/dbUtils')
+const fish = require('../../../db/fish')
 
 module.exports = {
     '/api/user/query': (req, res, next)=>{
-        userService.query(req.body, (error, result)=> {
-            if (error) return next()
-            return res.json({success: true, data: {rows: result}})
+        userService.query(req.body, (errcode, err, result)=> {
+            return res.json({retcode: errcode.code, msg: errcode.msg, data: {rows: result}})
         })
     }, 
     
     '/api/user/login': (req, res, next)=>{
-        userService.login(req.body, (error, result)=> {
-            if (error || !result || !result.length) {
-                return res.json({success: false, msg: '账号或密码不正确!'})
+        userService.login(req.body, (errcode, error, result)=> {
+            if (errcode.code !== errorInfo.SUCCESS.code) {
+                return res.json({retcode: errcode.code, msg: '账号或密码不正确!'})
             }
-            token.setHeaderToken(req, res, result[0])
-            return res.json({success: true, info: result[0], msg: '登录成功'})
+            const rowInfo = result[0];
+            token.setHeaderToken(req, res, rowInfo)
+            return res.json({retcode: errcode.code, info: rowInfo, msg: '登录成功'})
         })
     },
 
     '/api/user/register': (req, res, next)=>{
-        userService.register(req.body, (error, result)=> {
-            if (error) {
-                return res.json({success: false, msg: error})
+        dbUtils.isItemExist(fish, 'user', 'account', req.body.account, (existed, err, result)=>{
+            if (existed) {
+                return res.json({retcode: errorInfo.FAIL.code, msg: '用户已存在'})
             }
-            return res.json({success: true, msg: '注册成功'})
+
+            if (err) {
+                return res.json({retcode: errorInfo.SQL_ERROR.code, msg: errorInfo.SQL_ERROR.msg})
+            }
+
+            userService.register(req.body, (errcode, error, result)=> {
+                return res.json({retcode: errcode.code, msg: errcode.code === errorInfo.SUCCESS.code ? '注册成功' : '注册失败'})
+            })
         })
     },
 
     '/api/user/save': (req, res, next)=>{
         if (req.body.id) {
-            userService.update(req.body, (error, result)=>{
-                if (error) {
-                    return res.json({success: false, msg: error})
-                }
-
-                if (result.affectedRows == 0) {
-                    return res.json({success: false, msg: '保存失败'})
-                }
-                return res.json({success: true, msg: '保存成功'})
+            userService.update(req.body, (errcode, error, result)=>{
+                return res.json({retcode: errcode.code, msg: errcode.msg})
             })
         } else {
-            userService.register(req.body, (error, result)=> {
-                if (error) {
-                    return res.json({success: false, msg: error})
-                }
-                return res.json({success: true, msg: '保存成功'})
-            })
+            return res.json({retcode: errorInfo.FAIL.code, msg: errorInfo.FAIL.msg})
         }
+        // else {
+        //     this['/api/user/register'](req, res, next);
+        // }
     },
 
     '/api/user/delete': (req, res, next)=>{
-        userService.delete(req.body, (error, result)=> {
-            if (error) {
-                return res.json({success: false, msg: error})
-            }
-            return res.json({success: true, msg: '删除成功'})
+        userService.delete(req.body, (errcode, error, result)=> {
+            return res.json({retcode: errcode.code, msg: errcode.msg})
         })
     },
 }

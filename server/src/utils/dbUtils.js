@@ -1,4 +1,5 @@
 const queryPre = require('../../config/queryPre.json')
+const mysql = require('mysql')
 
 module.exports = {
     getQueryResultByDbResult(data) {
@@ -6,7 +7,7 @@ module.exports = {
         return JSON.parse(JSON.stringify(data));
     },
 
-    makeSelectByParam(table, param) {
+    makeSelectByParam(table, columns, param) {
         const conditions = []
         for(const i in param) {
             for(let j in queryPre) {
@@ -21,6 +22,22 @@ module.exports = {
 
         const condtionStr = conditions.length ? `WHERE ${conditions.join('AND')}` : ''
 
-        return `SELECT * FROM ${table} ${condtionStr}`
+        return `SELECT ${columns} FROM ${table} ${condtionStr}`
+    },
+
+    isItemExist(db, table, col, colValue, cb) {
+        db.exeSql(`SELECT * FROM ${table} WHERE ${col}=${mysql.escape(colValue)} LIMIT 1`, (err, results)=>{
+            if (err) {
+                cb(false, err, results);
+                return
+            }
+
+            if (results && results.length) {
+                cb(true, err, results)
+                return
+            }
+
+            cb(false, err, results)
+        })
     },
 }
