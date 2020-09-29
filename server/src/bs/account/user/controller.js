@@ -34,6 +34,10 @@ module.exports = {
                 if (error) {
                     return res.json({success: false, msg: error})
                 }
+
+                if (result.affectedRows == 0) {
+                    return res.json({success: false, msg: '保存失败'})
+                }
                 return res.json({success: true, msg: '保存成功'})
             })
         } else {
