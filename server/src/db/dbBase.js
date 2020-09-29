@@ -15,7 +15,11 @@ class DBBase {
                     conn.query(sql, (error, results)=>{
                         cb(error, dbUtils.getQueryResultByDbResult(results))
                     })
+                } else {
+                    cb('get connection error', null)
                 }
+
+                this.pool.releaseConnection(conn);
             })
         } else {
             cb('connection is null', null)
