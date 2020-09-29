@@ -1,7 +1,7 @@
 {
     "fish": {
         "host": "localhost",
-        "user": "db",
+        "user": "root",
         "password": "123456",
         "database": "fish"
     }

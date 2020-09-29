@@ -1,6 +1,7 @@
 const dbFish = require('../../../db/fish')
 const dbUtils = require('../../../utils/dbUtils')
 const uuid = require('../../../utils/uuid')
+const mysql = require('mysql')
 
 module.exports = {
     query(param, cb) {
@@ -9,11 +10,11 @@ module.exports = {
     },
 
     login(param, cb) {
-        dbFish.exeSql(`SELECT * FROM user WHERE account="${param.account}" AND pwd="${param.pwd}"`, cb)
+        dbFish.exeSql(`SELECT * FROM user WHERE account=${mysql.escape(param.account)} AND pwd=${mysql.escape(param.pwd)}`, cb)
     },
 
     register(param, cb) {
-        dbFish.exeSql(`SELECT * FROM user WHERE account="${param.account}" LIMIT 1`, (err, results)=>{
+        dbFish.exeSql(`SELECT * FROM user WHERE account=${mysql.escape(param.account)} LIMIT 1`, (err, results)=>{
             if (err) {
                 cb('异常错误', results);
                 return
@@ -24,7 +25,7 @@ module.exports = {
                 return
             }
 
-            dbFish.exeSql(`INSERT INTO user(id, account, pwd, name) VALUES("${uuid()}", "${param.account}", "${param.pwd}", "${param.name}")`, (err, result)=>{
+            dbFish.exeSql(`INSERT INTO user(id, account, pwd, name) VALUES(${mysql.escape(uuid())}, ${mysql.escape(param.account)}, ${mysql.escape(param.pwd)}, ${mysql.escape(param.name)})`, (err, result)=>{
                 if (err) {
                     cb('注册失败', null)
                 } else {
@@ -35,10 +36,10 @@ module.exports = {
     },
 
     update(param, cb) {
-        dbFish.exeSql(`UPDATE user SET pwd='${param.pwd}', name='${param.name}' WHERE id='${param.id}'`, cb);
+        dbFish.exeSql(`UPDATE user SET pwd=${mysql.escape(param.pwd)}, name=${mysql.escape(param.name)} WHERE id=${mysql.escape(param.id)}`, cb);
     },
 
     delete(param, cb) {
-        dbFish.exeSql(`DELETE FROM user WHERE id='${param.id}'`, cb);
+        dbFish.exeSql(`DELETE FROM user WHERE id=${mysql.escape(param.id)}`, cb);
     },
 }

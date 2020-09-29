@@ -11,7 +11,8 @@ module.exports = {
         for(const i in param) {
             for(let j in queryPre) {
                 if (i.startsWith(j)) {
-                    const value = queryPre[j] == 'LIKE' ? ' "%' + param[i] + '%"' : param[i]
+                    const mysqlParam = mysql.escape(param[i])
+                    const value = queryPre[j] == 'LIKE' ? ' "%' + mysqlParam + '%"' : mysqlParam
                     conditions.push(`${i.substring(j.length)} ${queryPre[j]} ${value}`)
                     break
                 }

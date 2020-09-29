@@ -39,7 +39,7 @@ http.interceptors.response.use(res => {
     if (!res.data.success) {
         if (res.request.responseType !== 'blob') {
             Message.error({
-                content: res.data.errMsg,
+                content: res.data.msg,
                 duration: 3
             })
         }

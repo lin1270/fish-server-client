@@ -12,19 +12,19 @@ module.exports = {
     '/api/user/login': (req, res, next)=>{
         userService.login(req.body, (error, result)=> {
             if (error || !result || !result.length) {
-                return res.json({success: false, errMsg: '账号或密码不正确!'})
+                return res.json({success: false, msg: '账号或密码不正确!'})
             }
             token.setHeaderToken(req, res, result[0])
-            return res.json({success: true, info: result[0], errMsg: '登录成功'})
+            return res.json({success: true, info: result[0], msg: '登录成功'})
         })
     },
 
     '/api/user/register': (req, res, next)=>{
         userService.register(req.body, (error, result)=> {
             if (error) {
-                return res.json({success: false, errMsg: error})
+                return res.json({success: false, msg: error})
             }
-            return res.json({success: true, errMsg: '注册成功'})
+            return res.json({success: true, msg: '注册成功'})
         })
     },
 
@@ -32,16 +32,16 @@ module.exports = {
         if (req.body.id) {
             userService.update(req.body, (error, result)=>{
                 if (error) {
-                    return res.json({success: false, errMsg: error})
+                    return res.json({success: false, msg: error})
                 }
-                return res.json({success: true, errMsg: '保存成功'})
+                return res.json({success: true, msg: '保存成功'})
             })
         } else {
             userService.register(req.body, (error, result)=> {
                 if (error) {
-                    return res.json({success: false, errMsg: error})
+                    return res.json({success: false, msg: error})
                 }
-                return res.json({success: true, errMsg: '保存成功'})
+                return res.json({success: true, msg: '保存成功'})
             })
         }
     },
@@ -49,9 +49,9 @@ module.exports = {
     '/api/user/delete': (req, res, next)=>{
         userService.delete(req.body, (error, result)=> {
             if (error) {
-                return res.json({success: false, errMsg: error})
+                return res.json({success: false, msg: error})
             }
-            return res.json({success: true, errMsg: '删除成功'})
+            return res.json({success: true, msg: '删除成功'})
         })
     },
 }
