@@ -40,4 +40,10 @@ module.exports = {
             cb(false, err, results)
         })
     },
+
+    removeItemNotInTable(param, tableDefine) {
+        for(let key in param) {
+            if (!tableDefine.includes(key)) delete param[key]
+        }
+    }
 }

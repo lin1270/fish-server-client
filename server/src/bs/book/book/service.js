@@ -15,22 +15,27 @@ module.exports = {
     },
 
     add(param, cb) {
+        const tempParam = {...param}
+        dbUtils.removeItemNotInTable(tempParam, config.tableDefine)
+
         const fields = []
         const values = []
-        for(let key in param) {
+        for(let key in tempParam) {
             fields.push(key)
-            values.push(mysql.escape(param[key]))
+            values.push(mysql.escape(tempParam[key]))
         }
         fields.push('id')
         values.push(mysql.escape(uuid()))
         let sqlStr = `INSERT INTO ${config.table}(${fields.join(',')})VALUES(${values.join(',')})`
         dbFish.exeSql(sqlStr, (err, result)=>{
-            cb(err ? errcode.SQL_ERROR : errcode.SUCCESS, err, result)
+            cb((err || !result || result.affectedRows === 0) ? errcode.SQL_ERROR : errcode.SUCCESS, err, result)
         })
     },
 
     update(param, cb) {
         const tempParam = {...param}
+        dbUtils.removeItemNotInTable(tempParam, config.tableDefine)
+
         delete tempParam.id
         const sets = []
         for(let key in tempParam) {
@@ -38,7 +43,7 @@ module.exports = {
         }
         dbFish.exeSql(`UPDATE ${config.table} SET ${sets.join(',')} WHERE id=${mysql.escape(param.id)}`, (err, result)=>{
             let errRet = errorInfo.SUCCESS
-            if (err) errRet = errorInfo.SQL_ERROR
+            if (err || !result) errRet = errorInfo.SQL_ERROR
             else if (result.affectedRows === 0) {
                 errRet = errorInfo.AFFECTED_ROWS_ZERO
             }

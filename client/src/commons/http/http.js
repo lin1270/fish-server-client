@@ -42,7 +42,7 @@ http.interceptors.response.use(res => {
                 duration: 3
             })
         }
-        if (res.data.errCode === 401) {
+        if (res.data.retcode === 401) {
             setTimeout(() => { router.replace('/login') }, 500)
 
         }
@@ -52,7 +52,7 @@ http.interceptors.response.use(res => {
         store.state.token = res.headers['x-user-token']
     }
     return res
-}, err => {
+}, (err) => {
     //对响应数据error处理
     store.state.loading = false
     Message.error({

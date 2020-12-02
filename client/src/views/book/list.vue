@@ -39,12 +39,17 @@
             v-model="userModal"
             :title="type === 'create' ? '添加书籍' : '编辑书籍'">
             <Form ref="userForm" :model="userForm" :rules="userRule" :label-width="80" v-if="userModal">
-                <FormItem label="价格" prop="price">
-                    <Input v-model="userForm.price" placeholder="请输入密码"></Input>
-                </FormItem>
                 <FormItem label="名称" prop="name">
                     <Input v-model="userForm.name" placeholder="请输入昵称"></Input>
                 </FormItem>
+                <FormItem label="价格" prop="price">
+                    <Input v-model.number="userForm.price" type="number" placeholder="请输入价格" />
+                </FormItem>
+                <FormItem label="销售日期" prop="sold_date">
+                    <DatePicker type="date" placeholder="Select date" :value="userForm.sold_date" @on-change="onSoldDateChange"></DatePicker>
+                </FormItem>
+
+                
             </Form>
             <Row type="flex" justify="end" slot="footer">
                 <Button @click="cancel">取消</Button>
@@ -61,7 +66,7 @@ export default {
     data() {
         return {
             form:{
-                title: null,
+                sold_date: '',
             },
             columns: [
                 {
@@ -80,6 +85,11 @@ export default {
                     align: 'center',
                 },
                 {
+                    title: '销售日期',
+                    key: 'sold_date',
+                    align: 'center',
+                },
+                {
                     title: '操作',
                     slot: 'action',
                     width: 80,
@@ -90,12 +100,15 @@ export default {
             userModal: false,
             userForm: {},
             userRule: {
-                price: [
-                    { required: true, message: '请输入价格', trigger: 'blur' }
-                ],
                 name: [
                     { required: true, message: '请输入昵称', trigger: 'blur' }
                 ],
+                price: [
+                    { required: true, type:'number', message: '请输入价格', trigger: 'blur' }
+                ],
+                sold_date: [
+                    { required: true, message: '请输入销售日期', trigger: 'blur' }
+                ]
                 
             },
             type: 'create',
@@ -137,7 +150,7 @@ export default {
         onSave () {
             this.$refs.userForm.validate((valid) => {
                 if (valid) {
-                    sendRequest(`/api/book/${this.type === 'create' ? 'add' : 'save'}`, this.userForm).then(res => {
+                    sendRequest(`/api/book/${this.type === 'create' ? 'add' : 'update'}`, this.userForm).then(res => {
                         if (res) {
                             let msg = this.type === 'create' ? '添加成功' : '修改成功'
                             this.$Message.success(msg)
@@ -153,7 +166,7 @@ export default {
         onDel(row) {
             this.$Modal.confirm({
                 title: '提示',
-                content: `<p>确定要删除<span style="color:rgb(22,155,213)">${row.account}</span>吗？</p>`,
+                content: `<p>确定要删除<span style="color:rgb(22,155,213)">${row.name}</span>吗？</p>`,
                 onOk: () => {
                     sendRequest('/api/book/delete', {id:row.id}).then((res)=>{
                         this.$Message.success('删除成功')
@@ -162,6 +175,10 @@ export default {
                 },
             });
         },
+
+        onSoldDateChange(date) {
+            this.userForm.sold_date = date
+        }
     }
 }
 </script>

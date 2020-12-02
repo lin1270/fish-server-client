@@ -23,7 +23,6 @@ app.use(function (req, res, next) {
 
 app.use(function (req, res, next) {
     if (req.method === 'OPTIONS') {
-        console.log('....options')
         res.status(200)
         res.json()
         return;
@@ -41,9 +40,9 @@ bs(app)
 // catch unauthorized error and other forward to error handler
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
-        res.status(401);
+        res.status(200);
         return res.json({
-            msg: 'Invalid Token',
+            msg: '登录失效',
             retcode: 401,
         })
     } else {

@@ -12,4 +12,12 @@ pos = parentStr.lastIndexOf('\\'); if (pos < 0) pos =parentStr.lastIndexOf('/')
 config.service = parentStr.substring(pos + 1)
 
 
+// 数据表定义
+config.tableDefine = [
+    "id",
+    "name",
+    "price",
+    "sold_date",
+]
+
 module.exports = config;

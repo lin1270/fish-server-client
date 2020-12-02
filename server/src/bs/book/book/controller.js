@@ -14,7 +14,7 @@ module.exports = {
 
     '/api/book/add': (req, res, next)=>{
         service.add(req.body, (errcode, error, result)=> {
-            return res.json({retcode: errcode, msg: errcode === errorInfo.SUCCESS ? errstr.addSuccess : errstr.addSuccess})
+            return res.json({retcode: errcode, msg: errcode === errorInfo.SUCCESS ? errstr.addSuccess : errstr.addFail})
         })
     },
 

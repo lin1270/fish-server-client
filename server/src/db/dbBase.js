@@ -9,16 +9,15 @@ class DBBase {
     }
 
     execute(sql, cb) {
-        console.log('...', sql)
         if (this.pool) {
             this.pool.getConnection((err, conn)=>{
                 if (!err && conn) {
                     conn.query(sql, (error, results)=>{
-                        cb(error, dbUtils.getQueryResultByDbResult(results))
-
                         if (error) {
                             console.log(error)
                         }
+
+                        cb(error, dbUtils.getQueryResultByDbResult(results))
                     })
                 } else {
                     console.log(err)
