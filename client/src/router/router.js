@@ -24,6 +24,13 @@ export default new Router({
                     component: (resolve) => require(['@/views/user/list'], resolve),
                     name: '用户列表'
                 },
+
+                // 书籍列表
+                {
+                    path: '/book/list',
+                    component: (resolve) => require(['@/views/book/list'], resolve),
+                    name: '书籍列表'
+                },
             ]
         },
         {

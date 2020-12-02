@@ -21,6 +21,17 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.use(function (req, res, next) {
+    if (req.method === 'OPTIONS') {
+        console.log('....options')
+        res.status(200)
+        res.json()
+        return;
+    } 
+    
+    next()
+})
+
 // authorization middleware
 app.use(auth)
 bs(app)
@@ -30,9 +41,10 @@ bs(app)
 // catch unauthorized error and other forward to error handler
 app.use(function (err, req, res, next) {
     if (err.name === 'UnauthorizedError') {
+        res.status(401);
         return res.json({
             msg: 'Invalid Token',
-            retcode: errInfo.FAIL.code,
+            retcode: 401,
         })
     } else {
       next(err, req, res, next)

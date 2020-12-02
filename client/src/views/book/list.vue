@@ -2,9 +2,9 @@
     <Row>
         <CommonListPage
             ref="listRef"
-            :title="['用户管理', '用户管理', '列表']"
+            :title="['书籍', '书籍', '列表']"
             :columns="columns"
-            url="/api/user/query"
+            url="/api/book/query"
             :hasPage="true"
             :queryForm="form"
         >
@@ -37,15 +37,12 @@
         <!--添加模块-->
         <Modal
             v-model="userModal"
-            :title="type === 'create' ? '添加用户' : '编辑用户'">
+            :title="type === 'create' ? '添加书籍' : '编辑书籍'">
             <Form ref="userForm" :model="userForm" :rules="userRule" :label-width="80" v-if="userModal">
-                <FormItem label="账号" prop="account">
-                    <Input v-model="userForm.account" :disabled="type !== 'create'" placeholder="请输入账号"></Input>
+                <FormItem label="价格" prop="price">
+                    <Input v-model="userForm.price" placeholder="请输入密码"></Input>
                 </FormItem>
-                <FormItem label="密码" prop="pwd">
-                    <Input v-model="userForm.pwd" placeholder="请输入密码"></Input>
-                </FormItem>
-                <FormItem label="昵称" prop="name">
+                <FormItem label="名称" prop="name">
                     <Input v-model="userForm.name" placeholder="请输入昵称"></Input>
                 </FormItem>
             </Form>
@@ -73,18 +70,13 @@ export default {
                     align: 'center'
                 },
                 {
-                    title: '账号',
-                    key: 'account',
-                    align: 'center'
-                },
-                {
-                    title: '密码',
-                    key: 'pwd',
+                    title: '名称',
+                    key: 'name',
                     align: 'center',
                 },
                 {
-                    title: '昵称',
-                    key: 'name',
+                    title: '价格',
+                    key: 'price',
                     align: 'center',
                 },
                 {
@@ -98,11 +90,8 @@ export default {
             userModal: false,
             userForm: {},
             userRule: {
-                account: [
-                    { required: true, message: '请输入账号', trigger: 'blur' }
-                ],
-                pwd: [
-                    { required: true, message: '请输入密码', trigger: 'blur' }
+                price: [
+                    { required: true, message: '请输入价格', trigger: 'blur' }
                 ],
                 name: [
                     { required: true, message: '请输入昵称', trigger: 'blur' }
@@ -148,7 +137,7 @@ export default {
         onSave () {
             this.$refs.userForm.validate((valid) => {
                 if (valid) {
-                    sendRequest(`/api/user/${this.type === 'create' ? 'register' : 'save'}`, this.userForm).then(res => {
+                    sendRequest(`/api/book/${this.type === 'create' ? 'add' : 'save'}`, this.userForm).then(res => {
                         if (res) {
                             let msg = this.type === 'create' ? '添加成功' : '修改成功'
                             this.$Message.success(msg)
@@ -166,7 +155,7 @@ export default {
                 title: '提示',
                 content: `<p>确定要删除<span style="color:rgb(22,155,213)">${row.account}</span>吗？</p>`,
                 onOk: () => {
-                    sendRequest('/api/user/delete', {id:row.id}).then((res)=>{
+                    sendRequest('/api/book/delete', {id:row.id}).then((res)=>{
                         this.$Message.success('删除成功')
                         this.$refs.listRef.refresh()
                     })

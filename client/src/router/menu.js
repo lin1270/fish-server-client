@@ -18,6 +18,18 @@ const menu = [
             },
         ]
     },
+    {
+        title: '书籍管理',
+        icon: 'ios-contact',
+        path: '/book',
+        children: [
+            {
+                title: '书籍列表',
+                path: '/book/list',
+                action: 'book-list-page'
+            },
+        ]
+    },
 ]
 
 export default menu
