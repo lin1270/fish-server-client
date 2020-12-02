@@ -8,7 +8,7 @@ module.exports = {
     '/api/user/query': (req, res, next)=>{
         console.log('...', req)
         userService.query(req.body, (errcode, err, result)=> {
-            return res.json({retcode: errcode, msg: errcode.msg, data: {rows: result}})
+            return res.json({retcode: errcode, msg: errcode.msg, data: {rows: result[0], total:result[1][0].total}})
         })
     }, 
     

@@ -22,7 +22,7 @@ module.exports = {
 
         const condtionStr = conditions.length ? `WHERE ${conditions.join('AND')}` : ''
 
-        return `SELECT ${columns} FROM ${table} ${condtionStr}`
+        return `SELECT SQL_CALC_FOUND_ROWS ${columns} FROM ${table} ${condtionStr} LIMIT ${param.size} OFFSET ${(param.page - 1) * param.size}; SELECT FOUND_ROWS() as total;`
     },
 
     isItemExist(db, table, col, colValue, cb) {

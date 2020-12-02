@@ -8,7 +8,7 @@ const errstr = require('../../../../config/errstr')
 module.exports = {
     '/api/book/query': (req, res, next)=>{
         service.query(req.body, (errcode, err, result)=> {
-            return res.json({retcode: errcode, msg: errcode.msg, data: {rows: result}})
+            return res.json({retcode: errcode, msg: errcode.msg, data: {rows: result[0], total:result[1][0].total}})
         })
     }, 
 

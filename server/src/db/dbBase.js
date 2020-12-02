@@ -13,6 +13,7 @@ class DBBase {
             this.pool.getConnection((err, conn)=>{
                 if (!err && conn) {
                     conn.query(sql, (error, results)=>{
+                        this.pool.releaseConnection(conn);
                         if (error) {
                             console.log(error)
                         }
@@ -23,8 +24,6 @@ class DBBase {
                     console.log(err)
                     cb('get connection error', null)
                 }
-
-                this.pool.releaseConnection(conn);
             })
         } else {
             console.log('connection is null')
